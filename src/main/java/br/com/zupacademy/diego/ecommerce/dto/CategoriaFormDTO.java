@@ -2,6 +2,7 @@ package br.com.zupacademy.diego.ecommerce.dto;
 
 import br.com.zupacademy.diego.ecommerce.models.Categoria;
 import br.com.zupacademy.diego.ecommerce.repositories.CategoriaRepository;
+import br.com.zupacademy.diego.ecommerce.validators.NaoCadastrado;
 import br.com.zupacademy.diego.ecommerce.validators.ValorUnico;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ public class CategoriaFormDTO {
     @ValorUnico(obj = Categoria.class, fieldName = "nome", message = "Categoria já cadastrada, insira uma outra categoria.")
     private String nome;
 
+    @NaoCadastrado(obj = Categoria.class, fieldName = "id")
     private Long categoriaMae;
 
     public CategoriaFormDTO() {

@@ -25,6 +25,6 @@ public class UsuarioController {
         Usuario usuario = dto.converter();
         usuarioRepository.save(usuario);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(usuario);
     }
 }
