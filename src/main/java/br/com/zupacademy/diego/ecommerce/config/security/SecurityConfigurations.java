@@ -1,6 +1,5 @@
 package br.com.zupacademy.diego.ecommerce.config.security;
 
-import antlr.Token;
 import br.com.zupacademy.diego.ecommerce.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
