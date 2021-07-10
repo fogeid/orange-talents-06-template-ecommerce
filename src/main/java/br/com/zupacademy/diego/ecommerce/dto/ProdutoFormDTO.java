@@ -2,6 +2,7 @@ package br.com.zupacademy.diego.ecommerce.dto;
 
 import br.com.zupacademy.diego.ecommerce.models.Categoria;
 import br.com.zupacademy.diego.ecommerce.models.Produto;
+import br.com.zupacademy.diego.ecommerce.models.Usuario;
 import br.com.zupacademy.diego.ecommerce.repositories.CategoriaRepository;
 import br.com.zupacademy.diego.ecommerce.validators.NaoCadastrado;
 import org.hibernate.validator.constraints.Length;
@@ -71,9 +72,9 @@ public class ProdutoFormDTO {
         return categoria;
     }
 
-    public Produto converter(CategoriaRepository categoriaRepository) {
+    public Produto converter(CategoriaRepository categoriaRepository, Usuario usuario) {
         Categoria categoria = categoriaRepository.findById(this.categoria).get();
         return new Produto(this.nome, this.valor, this.quantidadeDisponivel,
-                this.caracteristicas, this.descricao, categoria);
+                this.caracteristicas, this.descricao, categoria, usuario);
     }
 }
