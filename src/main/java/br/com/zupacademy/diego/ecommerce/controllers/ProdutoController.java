@@ -2,13 +2,17 @@ package br.com.zupacademy.diego.ecommerce.controllers;
 
 import br.com.zupacademy.diego.ecommerce.dto.ImagemFormDTO;
 import br.com.zupacademy.diego.ecommerce.dto.OpniaoFormDTO;
+import br.com.zupacademy.diego.ecommerce.dto.PerguntaFormDTO;
 import br.com.zupacademy.diego.ecommerce.dto.ProdutoFormDTO;
 import br.com.zupacademy.diego.ecommerce.models.Opniao;
+import br.com.zupacademy.diego.ecommerce.models.Pergunta;
 import br.com.zupacademy.diego.ecommerce.models.Produto;
 import br.com.zupacademy.diego.ecommerce.models.Usuario;
 import br.com.zupacademy.diego.ecommerce.repositories.CategoriaRepository;
 import br.com.zupacademy.diego.ecommerce.repositories.OpniaoRepository;
+import br.com.zupacademy.diego.ecommerce.repositories.PerguntaRepository;
 import br.com.zupacademy.diego.ecommerce.repositories.ProdutoRepository;
+import br.com.zupacademy.diego.ecommerce.utils.EnviarEmailFake;
 import br.com.zupacademy.diego.ecommerce.utils.UploaderFake;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +38,13 @@ public class ProdutoController {
     private OpniaoRepository opniaoRepository;
 
     @Autowired
+    private PerguntaRepository perguntaRepository;
+
+    @Autowired
     private UploaderFake uploaderFake;
+
+    @Autowired
+    private EnviarEmailFake enviarEmailFake;
 
     @PostMapping
     @Transactional
@@ -80,6 +90,26 @@ public class ProdutoController {
         Opniao opniao = dto.converter(produto.get(), usuario);
 
         opniaoRepository.save(opniao);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/perguntas")
+    @Transactional
+    public ResponseEntity<?> inserirPergunta(@PathVariable("id") Long id, @RequestBody @Valid PerguntaFormDTO dto, @AuthenticationPrincipal Usuario usuario) {
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Optional<Produto> produto = produtoRepository.findById(id);
+
+        if (produto.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Pergunta pergunta = dto.converter(produto.get(), usuario);
+        perguntaRepository.save(pergunta);
+        enviarEmailFake.enviarEmail(usuario);
+
         return ResponseEntity.ok().build();
     }
 }
