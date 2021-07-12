@@ -1,9 +1,6 @@
 package br.com.zupacademy.diego.ecommerce.controllers;
 
-import br.com.zupacademy.diego.ecommerce.dto.ImagemFormDTO;
-import br.com.zupacademy.diego.ecommerce.dto.OpniaoFormDTO;
-import br.com.zupacademy.diego.ecommerce.dto.PerguntaFormDTO;
-import br.com.zupacademy.diego.ecommerce.dto.ProdutoFormDTO;
+import br.com.zupacademy.diego.ecommerce.dto.*;
 import br.com.zupacademy.diego.ecommerce.models.Opniao;
 import br.com.zupacademy.diego.ecommerce.models.Pergunta;
 import br.com.zupacademy.diego.ecommerce.models.Produto;
@@ -111,5 +108,17 @@ public class ProdutoController {
         enviarEmailFake.enviarEmail(usuario);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}")
+    @Transactional
+    public ResponseEntity<ProdutoDetalhesDTO> detalhes(@PathVariable Long id) {
+        Optional<Produto> produto = produtoRepository.findById(id);
+
+        if (produto.isPresent()) {
+            return ResponseEntity.ok(new ProdutoDetalhesDTO(produto.get()));
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }

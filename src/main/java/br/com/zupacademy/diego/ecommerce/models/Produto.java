@@ -52,6 +52,12 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens = new HashSet<>();
 
+    @OneToMany(mappedBy = "produto")
+    private Set<Opniao> opnioes = new HashSet<>();
+
+    @OneToMany(mappedBy = "produto")
+    private Set<Pergunta> perguntas = new HashSet<>();
+
     @CreationTimestamp
     private LocalDateTime dataCriacao;
 
@@ -103,8 +109,28 @@ public class Produto {
         return usuario;
     }
 
+    public Set<ImagemProduto> getImagens() {
+        return imagens;
+    }
+
+    public Set<Opniao> getOpnioes() {
+        return opnioes;
+    }
+
+    public Set<Pergunta> getPerguntas() {
+        return perguntas;
+    }
+
     public LocalDateTime getDataCriacao() {
         return dataCriacao;
+    }
+
+    public Integer getTotalOpnioes() {
+        return this.opnioes.size();
+    }
+
+    public Double getMediaNotas() {
+        return this.opnioes.stream().map(Opniao::getNota).collect(Collectors.averagingInt(i -> i));
     }
 
     public void adicionarImagens(Set<String> links) {
