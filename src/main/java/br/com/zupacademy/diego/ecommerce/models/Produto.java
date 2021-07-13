@@ -47,7 +47,7 @@ public class Produto {
     private Categoria categoria;
 
     @ManyToOne
-    Usuario usuario;
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens = new HashSet<>();
@@ -140,5 +140,14 @@ public class Produto {
 
     public boolean pertence(Usuario usuario) {
         return usuario.getId() == this.usuario.getId();
+    }
+
+    public boolean abaterEstoque(Integer quantidade) {
+        if (quantidadeDisponivel >= quantidade) {
+            quantidadeDisponivel -= quantidade;
+            return true;
+        }
+
+        return false;
     }
 }
